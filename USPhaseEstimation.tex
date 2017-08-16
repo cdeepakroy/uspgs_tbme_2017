@@ -465,7 +465,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Ultrasound is an effective tool for rapid non-invasive assessment of cardiac structure and function. However, knowledge of the cardiac and/or respiratory cycle phase of each frame in the ultrasound video is essential in many diagnostic applications. Furthermore, many applications also require the ability to capture cardiac function at a high temporal resolution for accurate diagnosis. These tasks are particularly challenging in pre-clinical studies involving small animals with high heart and respiration rates. In this paper, we present a novel method for estimation of the instantaneous cardiac and respiratory phases directly from cardiac ultrasound videos. The method transforms the complex high-dimensional image sequence into a univariate time series with similar periodicity characteristics, decouples the periodic sources of beating heart and respiratory motion using a trend extraction technique, and estimates the cardiac and respiratory phases using the Hilbert transform. We also present a robust non-parametric regression technique for gating out respiratory frames and a kernel regression model that reconstructs images at any cardiac phase and facilitates temporal super-resolution. We validate our methods using 2D cardiac ultrasound or echocardiography videos and electrocardiogram (ECG) recordings of 6 mice. These methods generate an image series of a cardiac cycle with high temporal resolution from an ultrasound system with a limited frame rate.
+Ultrasound is an effective tool for rapid non-invasive assessment of cardiac structure and function. Knowledge of the cardiac and/or respiratory cycle phase of each frame in the ultrasound video is essential in many diagnostic applications. Furthermore, many applications also require the ability to capture cardiac function at a high temporal resolution for accurate diagnosis. These tasks are particularly challenging in pre-clinical studies involving small animals with high heart and respiration rates. In this paper, we present a novel method for estimation of the instantaneous cardiac and respiratory phases directly from cardiac ultrasound videos. The method transforms the  sequence of high-dimensional images in the given ultrasound video into a univariate time series with similar periodicity characteristics, decouples the periodic sources of beating heart and respiratory motion using a trend extraction technique, and estimates the cardiac and respiratory phases using the Hilbert transform. We also present a robust non-parametric regression technique for gating out respiratory frames and a kernel regression model that reconstructs images at any cardiac phase and facilitates temporal super-resolution. We validate our methods using 2D cardiac ultrasound or echocardiography videos and electrocardiogram (ECG) recordings of 6 mice. These methods generate an image series of a cardiac cycle with high temporal resolution from an ultrasound system with a limited frame rate.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -509,7 +509,7 @@ Cardiovascular disease is the leading cause of death worldwide and ultrasound is
 
 \vskip0.75ex
 \noindent
-\textbf{Related prior work.} Previous work on the estimation of cardiac and/or respiratory phases directly from ultrasound echocardiography videos is limited. In~\cite{Karadayi2006}, Karadayi\etal compute a signal of the x- or y-coordinate of the center-of-mass of each frame, use a band-pass filter to remove frequencies outside the cardiac range, determine the dominant frequency in the periodogram, and apply matched filtering using single-period sine and cosine signals at the dominant frequency to estimate the instantaneous cardiac phase. The issue with this technique is that the center-of-mass signals may not be reliable in all scenarios. In~\cite{Sundar2009}, Sundar\etal compute a signal of phase correlation between consecutive frames and apply a band-pass and low-pass filter to obtain an estimate of the instantaneous cardiac and respiratory phase, respectively. Phase correlation encodes global translation in the image plane and cannot model out-of-plane motion of the beating heart present in our data. In~\cite{Wachinger2012}, Wachinger\etal use a manifold learning or non-linear dimensionality reduction technique called Laplacian Eigenmap to learn the low-dimensional manifold of the image sequence embedded in high-dimensional space and project the high-dimensional image sequence onto first eigen direction of the Laplacian of the image similarity graph to obtain a 1D signal encoding respiratory motion. In~\cite{Panayiotou2014}, Panayiotou\etal use a  series of image filtering operations to obtain a binary mask of pixels predominantly affected by cardiac/respiratory motion, apply a linear dimensionality reduction technique called principal component analysis (PCA) on the intensities of image pixels within the binary mask, project the images onto the principal components with high variation to extract 1D signals encoding cardiac/respiratory motion, and post process them by suppressing undesired frequencies in the frequency domain. While the aforementioned approaches based on manifold learning and masked PCA are promising and generally applicable, in this paper, we present a method that can estimate the cardiac phases more accurately.
+\textbf{Related prior work.} Previous work on the estimation of cardiac and/or respiratory phases directly from ultrasound echocardiography videos is limited. In~\cite{Karadayi2006}, Karadayi\etal compute a signal of the x- or y-coordinate of the center-of-mass of each frame, use a band-pass filter to remove frequencies outside the cardiac range, determine the dominant frequency in the periodogram, and apply matched filtering using single-period sine and cosine signals at the dominant frequency to estimate the instantaneous cardiac phase. The issue with this technique is that the center-of-mass signals may not be reliable in all scenarios. In~\cite{Sundar2009}, Sundar\etal compute a signal of phase correlation between consecutive frames and apply a band-pass and low-pass filter to obtain an estimate of the instantaneous cardiac and respiratory phase, respectively. Phase correlation encodes global translation in the image plane and cannot model out-of-plane motion of the beating heart present in our data. In~\cite{Wachinger2012}, Wachinger\etal use a manifold learning or non-linear dimensionality reduction technique called Laplacian Eigenmap to learn the low-dimensional manifold of the image sequence embedded in high-dimensional space and project the images onto first eigen direction of the Laplacian of the image similarity graph to obtain a 1D signal encoding respiratory motion. In~\cite{Panayiotou2014}, Panayiotou\etal use a  series of image filtering operations to obtain a binary mask of pixels predominantly affected by cardiac/respiratory motion, apply a linear dimensionality reduction technique called principal component analysis (PCA) on the intensities of image pixels within the binary mask, project the images onto the principal directions with high variation to extract 1D signals encoding cardiac/respiratory motion, and post process them by suppressing undesired frequencies in the frequency domain. While the aforementioned approaches based on manifold learning and masked PCA are promising and generally applicable, in this paper, we present a method that can estimate the cardiac phases more accurately. The proposed method extracts the univariate signal directly from the images and does not require an intermediate representation such as the PCA or manifold embedding of the image data.
 %
 %\vspace{-0.3cm}
 %
@@ -541,6 +541,7 @@ In this section, we present the theory underlying the proposed methods. In Secti
 \label{fig:phase_estimation}
 \end{figure*}
 %
+
 While there have been numerous efforts for the estimation of instantaneous phase and/or frequency in periodic univariate time series data~\cite{Boashash1992,Rosenblum2001,Freund2003,Luo2003,Lu2013}, there are not many methods that tackle this problem in a multivariate setting such as the case of cardiac ultrasound videos wherein thousands of variables (pixel intensities) are involved. Our strategy is to transform this complex multivariate problem into a univariate one and take advantage of existing methods to solve the problem. 
 %
 \begin{figure*}[t]
@@ -666,12 +667,12 @@ VID & mean $\pm$ stddev & median & IQR & range \\ \hline
 \hline
 \multicolumn{1}{|l|}{} & \multicolumn{4}{c|}{mean $\pm$ stddev error in frames} \\ \hline
 VID & Proposed & Phase corr\cite{Karadayi2006} & Manifold learn\cite{Wachinger2012} & Mask PCA\cite{Panayiotou2014} \\ \hline
-1 & 1.09 +/- 1.08 & 4.09 +/- 2.97 & 1.45 +/- 0.78 & 1.55 +/- 0.78 \\ \hline
-2 & 1.36 +/- 0.08 & 2.91 +/- 2.23 & 1.82 +/- 0.94 & 1.73 +/- 1.05 \\ \hline
-3 & 1.18 +/- 0.03 & 3.45 +/- 1.97 & 1.45 +/- 1.08 & 1.55 +/- 0.78 \\ \hline
-4 & 0.73 +/- 0.86 & 4.64 +/- 3.75 & 1.36 +/- 0.98 & 1.18 +/- 1.03 \\ \hline
-5 & 1.27 +/- 0.86 & 4.70 +/- 3.77 & 1.27 +/- 0.86 & 1.36 +/- 0.88 \\ \hline
-6 & 0.80 +/- 0.40 & 6.00 +/- 3.52 & 1.00 +/- 0.63 & 1.10 +/- 0.54 \\ \hline
+1 & \bf{1.09 +/- 1.08} & 4.09 +/- 2.97 & 1.45 +/- 0.78 & 1.55 +/- 0.78 \\ \hline
+2 & \bf{1.36 +/- 0.08} & 2.91 +/- 2.23 & 1.82 +/- 0.94 & 1.73 +/- 1.05 \\ \hline
+3 & \bf{1.18 +/- 0.03} & 3.45 +/- 1.97 & 1.45 +/- 1.08 & 1.55 +/- 0.78 \\ \hline
+4 & \bf{0.73 +/- 0.86} & 4.64 +/- 3.75 & 1.36 +/- 0.98 & 1.18 +/- 1.03 \\ \hline
+5 & \bf{1.27 +/- 0.86} & 4.70 +/- 3.77 & \bf{1.27 +/- 0.86} & 1.36 +/- 0.88 \\ \hline
+6 & \bf{0.80 +/- 0.40} & 6.00 +/- 3.52 & 1.00 +/- 0.63 & 1.10 +/- 0.54 \\ \hline
 \end{tabular}
 \label{table:R_peak_localization}
 \end{minipage}
@@ -716,7 +717,7 @@ In this paper, we have presented a novel method to estimate the instantaneous ca
 %
 % use section* for acknowledgment
 \section*{Acknowledgment}
-This work is being supported by the NIH grants NIBIB/NIGMS:1R01EB021396-01A1 and NCI:5R44CA165621-04. 
+The proposed work is being supported through the NIH grants NIBIB/NIGMS:1R01EB021396-01A1 and NCI:5R44CA165621-04. 
 %
 \bibliographystyle{IEEEtran}
 \bibliography{library}
